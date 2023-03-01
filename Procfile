@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn wsgi --log-file=-x
+web: gunicorn src.wsgi --log-file=-x
