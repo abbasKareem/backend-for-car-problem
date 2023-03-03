@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, PostType, CarCountry, CarProblemLocation, CarType
+from .models import Post, PostType, CarCountry, CarProblemLocation, CarType, Comment
 from datetime import datetime
 
 
@@ -38,7 +38,14 @@ class PostSerializer(serializers.ModelSerializer):
     car_type = serializers.SerializerMethodField()
     problem_location = serializers.SerializerMethodField()
     post_type = serializers.SerializerMethodField()
-    # created_at = serializers.SerializerMethodField()
+    like_count = serializers.SerializerMethodField()
+    comment_count = serializers.SerializerMethodField()
+
+    def get_like_count(self, post):
+        return post.likes.count()
+
+    def get_comment_count(self, post):
+        return Comment.objects.filter(post=post).count()
 
     def get_author(self, obj):
         return obj.author.username
@@ -52,14 +59,18 @@ class PostSerializer(serializers.ModelSerializer):
     def get_post_type(self, obj):
         return obj.post_type.name
 
-    # def get_created_at(self, obj):
-    #     created_at_str = obj.created_at
-    #     created_at = datetime.fromisoformat(created_at_str[:-1] + "+00:00")
-    #     date_str = created_at.strftime("%Y-%m-%d")
-    #     time_str = created_at.strftime("%-I%p").lower()
-    #     formatted_str = f"{date_str} at {time_str}"
-
     class Meta:
         model = Post
         fields = ['id', 'title', 'content', 'car_type', 'problem_location',
-                  'post_type', 'created_at', 'updated_at', 'author', 'main_image', 'image_2', 'image_3', 'image_4', 'image_5']
+                  'post_type', 'created_at', 'updated_at', 'author', 'main_image', 'image_2', 'image_3', 'image_4', 'image_5', 'like_count', 'comment_count']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return obj.user.username
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'create_at', 'user', 'post']

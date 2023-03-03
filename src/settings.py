@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "account",
     "rest_framework",
-    "post",
+    "post"
 ]
 
 

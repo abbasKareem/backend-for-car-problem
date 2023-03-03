@@ -1,6 +1,8 @@
 from .models import Profile
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
+from post.models import Post
+from post.serializers import PostSerializer
 
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer
@@ -8,9 +10,11 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ["first_name", "last_name",
+                  "bio", "image"]
     # def update(self, instance, validated_data):
     #     instance.city = validated_data.get('city', instance.city)
     #     instance.save()
@@ -18,11 +22,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(ModelSerializer):
-    profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "start_date", "profile"]
+        fields = ["id", "username", "email",
+                  "start_date"]
     # def create(self, validated_data):
     #     profile_data = validated_data.pop('profile')
     #     user = User.objects.create(**validated_data)

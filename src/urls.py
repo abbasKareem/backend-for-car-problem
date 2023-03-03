@@ -10,6 +10,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    path('api/', include('post.urls'))
+    path('api/', include('post.urls')),
+    path('account/', include('account.urls'))
 
 ]
